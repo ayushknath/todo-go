@@ -68,14 +68,18 @@ func displayOptions() {
 }
 
 func viewTasks(tasks []TodoItem) {
-	for _, task := range tasks {
-		var status string
-		if task.completed {
-			status = "completed"
-		} else {
-			status = "pending"
+	if len(tasks) != 0 {
+		for _, task := range tasks {
+			var status string
+			if task.completed {
+				status = "completed"
+			} else {
+				status = "pending"
+			}
+			fmt.Printf("Task: %v\tTask ID: %v\tStatus: %v\n", task.task, task.id, status)
 		}
-		fmt.Printf("Task: %v\tTask ID: %v\tStatus: %v\n", task.task, task.id, status)
+	} else {
+		fmt.Println("No tasks exist")
 	}
 }
 
