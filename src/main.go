@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type TodoItem struct {
 	task      string
@@ -14,6 +17,17 @@ func main() {
 
 	var option uint
 	var tasks []TodoItem
+	filePath := "todos.json"
+
+	if !fileExists(filePath) {
+		_, err := os.Create(filePath)
+		if err != nil {
+			fmt.Println("Error:", err)
+			os.Exit(1)
+		}
+	} else {
+		// parse the JSON and store in tasks
+	}
 
 	for {
 		displayOptions()
@@ -56,6 +70,9 @@ func main() {
 			deleteTask(&tasks, taskIdx)
 		}
 	}
+
+	// before exiting, convert struct to JSON
+	// save the file and exit
 }
 
 func displayOptions() {
