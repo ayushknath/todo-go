@@ -41,7 +41,7 @@ func main() {
 			continue
 		}
 
-		if option == 6 {
+		if option == OPTION_END {
 			break
 		}
 
