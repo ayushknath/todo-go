@@ -7,7 +7,7 @@ import (
 
 type TodoItem struct {
 	Task      string `json:"task"`
-	Id        int    `json:"id"`
+	Id        int64  `json:"id"`
 	Completed bool   `json:"completed"`
 }
 
@@ -106,7 +106,7 @@ func addNewTask(tasksPointer *[]TodoItem) {
 	var newTask string = getTask()
 	var todoItem = TodoItem{
 		Task:      newTask,
-		Id:        len(*tasksPointer),
+		Id:        genId(),
 		Completed: false,
 	}
 	*tasksPointer = append(*tasksPointer, todoItem)

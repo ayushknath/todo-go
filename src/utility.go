@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func getTask() string {
@@ -22,7 +23,7 @@ func getTask() string {
 }
 
 func getTaskIndex(tasks []TodoItem) (int, error) {
-	var id int
+	var id int64
 	var idx int = -1
 
 	fmt.Printf("Enter task ID: ")
@@ -38,4 +39,11 @@ func getTaskIndex(tasks []TodoItem) (int, error) {
 	}
 
 	return idx, nil
+}
+
+func genId() int64 {
+	then := time.Date(2020, 1, 1, 23, 0, 0, 0, time.UTC)
+	now := time.Now()
+	duration := now.Sub(then)
+	return duration.Milliseconds()
 }
