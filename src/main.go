@@ -15,19 +15,32 @@ type TodoItem struct {
 func main() {
 	const OPTION_BEGIN uint = 1
 	const OPTION_END uint = 6
+	const FILE_PERM = 0644
+	const FILE_PATH string = "todos.json"
 
 	var option uint
 	var tasks []TodoItem
-	filePath := "todos.json"
 
-	if !fileExists(filePath) {
-		_, err := os.Create(filePath)
+	if !fileExists(FILE_PATH) {
+		f, err := os.Create(FILE_PATH)
 		if err != nil {
 			fmt.Println("Error:", err)
 			os.Exit(1)
 		}
+		defer f.Close()
 	} else {
-		// parse the JSON and store in tasks
+		jsonData, err := os.ReadFile(FILE_PATH)
+		if err != nil {
+			fmt.Println("Error occured while reading JSON file")
+			os.Exit(1)
+		}
+		fmt.Printf("Read JSON data: %v\n", string(jsonData))
+		unmarshalErr := json.Unmarshal(jsonData, &tasks)
+		if unmarshalErr != nil {
+			fmt.Println("Error occured while parsing JSON data")
+			os.Exit(1)
+		}
+		fmt.Printf("Tasks after population: %v\n", tasks)
 	}
 
 	for {
@@ -72,13 +85,13 @@ func main() {
 		}
 	}
 
-	// convert to JSON
 	jsonData, err := json.Marshal(tasks)
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("Error while encoding JSON data")
 		os.Exit(1)
 	}
-	fmt.Printf("JSON data: %v\n", string(jsonData))
+	fmt.Printf("Encoded JSON data: %v\n", string(jsonData))
+	os.WriteFile(FILE_PATH, jsonData, FILE_PERM)
 }
 
 func displayOptions() {
