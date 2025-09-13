@@ -17,3 +17,12 @@ func fileExists(filePath string) bool {
 	}
 	return true
 }
+
+func readFile(filePath string) []byte {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("Error occured while reading JSON file")
+		os.Exit(1)
+	}
+	return data
+}

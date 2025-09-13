@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 )
@@ -29,18 +28,8 @@ func main() {
 		}
 		defer f.Close()
 	} else {
-		jsonData, err := os.ReadFile(FILE_PATH)
-		if err != nil {
-			fmt.Println("Error occured while reading JSON file")
-			os.Exit(1)
-		}
-		fmt.Printf("Read JSON data: %v\n", string(jsonData))
-		unmarshalErr := json.Unmarshal(jsonData, &tasks)
-		if unmarshalErr != nil {
-			fmt.Println("Error occured while parsing JSON data")
-			os.Exit(1)
-		}
-		fmt.Printf("Tasks after population: %v\n", tasks)
+		jsonData := readFile(FILE_PATH)
+		jsonDecode(jsonData, &tasks)
 	}
 
 	for {
@@ -85,13 +74,7 @@ func main() {
 		}
 	}
 
-	jsonData, err := json.Marshal(tasks)
-	if err != nil {
-		fmt.Println("Error while encoding JSON data")
-		os.Exit(1)
-	}
-	fmt.Printf("Encoded JSON data: %v\n", string(jsonData))
-	os.WriteFile(FILE_PATH, jsonData, FILE_PERM)
+	os.WriteFile(FILE_PATH, jsonEncode(&tasks), FILE_PERM)
 }
 
 func displayOptions() {
