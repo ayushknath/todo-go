@@ -1,14 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 )
 
 type TodoItem struct {
-	task      string
-	id        int
-	completed bool
+	Task      string `json:"task"`
+	Id        int    `json:"id"`
+	Completed bool   `json:"completed"`
 }
 
 func main() {
@@ -53,7 +54,7 @@ func main() {
 				fmt.Println("Error:", err)
 				continue
 			}
-			tasks[taskIdx].completed = true
+			tasks[taskIdx].Completed = true
 		case 4:
 			taskIdx, err := getTaskIndex(tasks)
 			if err != nil {
@@ -71,8 +72,13 @@ func main() {
 		}
 	}
 
-	// before exiting, convert struct to JSON
-	// save the file and exit
+	// convert to JSON
+	jsonData, err := json.Marshal(tasks)
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+	fmt.Printf("JSON data: %v\n", string(jsonData))
 }
 
 func displayOptions() {
@@ -88,12 +94,12 @@ func viewTasks(tasks []TodoItem) {
 	if len(tasks) != 0 {
 		for _, task := range tasks {
 			var status string
-			if task.completed {
+			if task.Completed {
 				status = "completed"
 			} else {
 				status = "pending"
 			}
-			fmt.Printf("Task: %v\tTask ID: %v\tStatus: %v\n", task.task, task.id, status)
+			fmt.Printf("Task: %v\tTask ID: %v\tStatus: %v\n", task.Task, task.Id, status)
 		}
 	} else {
 		fmt.Println("No tasks exist")
@@ -103,16 +109,16 @@ func viewTasks(tasks []TodoItem) {
 func addNewTask(tasksPointer *[]TodoItem) {
 	var newTask string = getTask()
 	var todoItem = TodoItem{
-		task:      newTask,
-		id:        len(*tasksPointer),
-		completed: false,
+		Task:      newTask,
+		Id:        len(*tasksPointer),
+		Completed: false,
 	}
 	*tasksPointer = append(*tasksPointer, todoItem)
 }
 
 func editTask(tasksPointer *[]TodoItem, taskIdx int) {
 	var newTask string = getTask()
-	(*tasksPointer)[taskIdx].task = newTask
+	(*tasksPointer)[taskIdx].Task = newTask
 }
 
 func deleteTask(tasksPointer *[]TodoItem, taskIdx int) {

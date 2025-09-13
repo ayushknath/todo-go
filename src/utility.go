@@ -28,7 +28,7 @@ func getTaskIndex(tasks []TodoItem) (int, error) {
 	fmt.Printf("Enter task ID: ")
 	fmt.Scan(&id)
 	for index, task := range tasks {
-		if task.id == id {
+		if task.Id == id {
 			idx = index
 			break
 		}
